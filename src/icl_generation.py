@@ -3,8 +3,8 @@ import random
 import json
 import re
 import pickle
-import utils
-import prompts
+from src import utils
+from src import prompts
 import os
 import sys
 
@@ -59,10 +59,11 @@ def generate_icl_examples(domains, words, minimum_problem_per_difficulty=10):
     folder_path = "ICL-examples"
 
     if os.path.isdir(folder_path):
-        print(f"The folder '{folder_path}' exists. Delete it to start generation")
-        sys.exit()
+        raise TypeError("ICL-examples folder exists. Delete it to start generation")
+    else:
+        os.makedirs(folder_path, exist_ok=True)    
     # make sure the folder will exist when we start saving
-    os.makedirs(folder_path, exist_ok=True)    
+    
 
     current_verifier_command = prompts.generator_difficulty_commands["First"]
     gpt4o_correct_responses = []

@@ -1,8 +1,9 @@
 import pandas as pd
 import random
 from pathlib import Path
-import prompts
-import utils 
+from src import prompts
+from src import utils  # loads cleaned_version_usenix/some_module.py
+import re
 
 def generate_threshold(thresholds):
     if isinstance(thresholds, tuple) and len(thresholds) == 2 and thresholds[0] < thresholds[1]:
@@ -64,9 +65,16 @@ def gen_sample(difficulty, bank, domains, threshold, system_prompt, model, model
     }
     return generator_output
 
-    
-def generate_bank(domains, words, system_prompt, thresholds, num_samples, model="o3-mini", model_provider="OpenAI", thinking_budget=None):
+def solvability_extract_solution(text):
+    """
+    Extracts the word following 'solution:' or 'solution =' (case-insensitive).
+    """
+    pattern = r'solvability\s*[:=]\s*([A-Za-z]+)'
+    match = re.search(pattern, text, re.IGNORECASE)
+    return match.group(1) if match else None
 
+def generate_bank_reasoning(domains, words, system_prompt, thresholds, num_samples, model="o3-mini", model_provider="OpenAI", thinking_budget=None):
+    print(prompts.solvability_system_prompt)
     easy_threshold, medium_threshold, difficult_threshold = generate_threshold(thresholds)
 
     threshold_bank = utils.split_by_value(words, thresholds)
@@ -87,20 +95,41 @@ def generate_bank(domains, words, system_prompt, thresholds, num_samples, model=
 
     for i in range(num_samples):
         
-        easy_problem = gen_sample("easy", easy_bank, domains, easy_threshold, system_prompt, model, model_provider, thinking_budget)
+        valid_sample= False
+        while not valid_sample:
+            easy_problem = gen_sample("easy", easy_bank, domains, easy_threshold, system_prompt, model, model_provider, thinking_budget)
+            check_input = easy_problem['generated_question'] + easy_problem['generated_solution']
+            solvabilty_response = utils.run_command(check_input, prompts.solvability_system_prompt)
+            solvability_check = solvability_extract_solution(solvabilty_response['text'])
+            if solvability_check == "Yes":
+                valid_sample = True
         problems += [easy_problem['generated_question']]
         solutions += [easy_problem['generated_solution']]
         labels += ["easy"]
 
     for i in range(num_samples):
-
+        valid_sample= False
+        while not valid_sample:
+            medium_problem = gen_sample("medium", medium_bank, domains, medium_threshold, system_prompt, model, model_provider, thinking_budget)
+            check_input = medium_problem['generated_question'] + medium_problem['generated_solution']
+            solvabilty_response = utils.run_command(check_input, prompts.solvability_system_prompt)
+            solvability_check = solvability_extract_solution(solvabilty_response['text'])
+            if solvability_check == "Yes":
+                valid_sample = True
         medium_problem = gen_sample("medium", medium_bank, domains, medium_threshold, system_prompt, model, model_provider, thinking_budget)  
         problems += [medium_problem['generated_question']]
         solutions += [medium_problem['generated_solution']]
         labels += ["medium"]
 
     for i in range(num_samples):
-
+        valid_sample= False
+        while not valid_sample:
+            difficult_problem = gen_sample("difficult", difficult_bank, domains, difficult_threshold, system_prompt, model, model_provider, thinking_budget)
+            check_input = difficult_problem['generated_question'] + difficult_problem['generated_solution']
+            solvabilty_response = utils.run_command(check_input, prompts.solvability_system_prompt)
+            solvability_check = solvability_extract_solution(solvabilty_response['text'])
+            if solvability_check == "Yes":
+                valid_sample = True
         difficult_problem = gen_sample("difficult", difficult_bank, domains, difficult_threshold, system_prompt, model, model_provider, thinking_budget)  
         problems += [difficult_problem['generated_question']]
         solutions += [difficult_problem['generated_solution']]
@@ -128,7 +157,15 @@ def generate_bank_non_reasoning(words, domains, num_samples):
     solutions = []
     for i in range(num_samples):
         word = random.sample(words, 1)[0]
-        problems += [generate_problem_non_reasoning(word, domains, "gpt-4o")]
+        valid_sample= False
+        while not valid_sample:
+            problem = generate_problem_non_reasoning(word, domains, "gpt-4o")
+            check_input = problem + word
+            solvabilty_response = utils.run_command(check_input, prompts.solvability_system_prompt)
+            solvability_check = solvability_extract_solution(solvabilty_response['text'])
+            if solvability_check == "Yes":
+                valid_sample = True        
+        problems += [problem]
         solutions += [word]
     bank_df = pd.DataFrame({"Problems":problems, "Solutions":solutions})
     return bank_df
