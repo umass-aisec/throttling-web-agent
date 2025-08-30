@@ -24,7 +24,7 @@ from google import genai
 from google.genai.types import GenerateContentConfig, HttpOptions
 from typing import Iterable, Callable, Any, List, Tuple, Union, Optional
 import time
-import prompts
+from src import prompts
 
 load_dotenv()
 
@@ -67,42 +67,6 @@ def run_command(user_prompt, system_prompt=None, model="gpt-4o", prev_response_i
         'reasoning tokens': reasoning_tokens,
         'entire response': response
     }
-
-def deepseek_run_command(user_prompt, system_prompt=None, model="deepseek-chat", prev_response_id=None):
-    client = OpenAI(api_key="sk-690b4388d1a64dd9b8b37ef5c4ac2d81", base_url="https://api.deepseek.com")
-    if system_prompt is None:
-        messages = [{"role": "user", "content": user_prompt}]
-    else:
-        messages = [
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt}
-        ]
-
-    response = client.chat.completions.create(
-        model=model,
-        messages=messages
-    )
-    time_to_wait = 5
-    for i in range(10):
-        try:
-            text = response.choices[0].message.content
-            reasoning_tokens = None
-            cached_tokens = None
-        except:
-            time.sleep(time_to_wait)
-            time_to_wait = time_to_wait*2
-            
-        else:
-            break       
-
-
-    return {
-        'text': text,
-        'cached tokens': cached_tokens,
-        'reasoning tokens': reasoning_tokens,
-        'entire response': response
-    }
-
 
 def gemini_run_command(user_prompt, system_prompt=None, model="gemma-3-27b-it", thinking_budget =None):
     client = genai.Client(api_key=api_key_google)
@@ -281,14 +245,20 @@ def solution_verification(prover, problem):
     else:
         return False
 
-def accuracy_mesurement(dataset, model):
+def accuracy_mesurement(dataset, model="o3-mini", provider="OpenAI"):
     response = []
     response_solution = []
     for problem in dataset['Problems']:
         incorrect_dict = True
         while incorrect_dict:
-            response = run_command(problem, prompts.prover_system_prompt, model)
-            response_text = response['text'].replace('“', '"').replace('”', '"').replace("'", '"')
+            if provider == "OpenAI":
+                response = run_command(problem, prompts.prover_system_prompt, model)
+                response_text = response['text'].replace('“', '"').replace('”', '"').replace("'", '"')
+            elif provider == "Google":
+                output = gemini_run_command(problem, prompts.prover_system_prompt,model="gemini-2.0-flash")
+                response_text = output['text'].replace('“', '"').replace('”', '"').replace("'", '"').replace("```", '"')
+            else:
+                raise ValueError("Only OpenAI and Google supported")
             response_dict = re.search(r'\{\s*"Gate.*?}\s*', response_text, re.DOTALL)
             if (response_dict != None):
                 try:

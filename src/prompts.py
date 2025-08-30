@@ -1,7 +1,7 @@
 import random
 import re
 from pathlib import Path
-import utils
+from src import utils
 
 def construct_user_model_interaction(sample, difficulty, sampled_domains):
     question = sample['question']
@@ -65,20 +65,6 @@ def construct_system_prompt(domains, example_directory="ICL-examples"):
     ]
 
     folder = Path(example_directory)
-
-    # Build a {filename -> Path} map for all jsons in the folder
-    # json_paths = {p.name: p for p in folder.glob("*.json")}
-
-    # Validate required files by name
-    #missing = [name for name in required_files if name not in json_paths]
-    # if missing:
-    #     raise FileNotFoundError(f"Missing ICL files: {missing}")
-
-    # Use names instead of positions
-    # pkl_path_easy   = str(json_paths["low_reasoning.json"])
-    # pkl_path_medium = str(json_paths["medium_reasoning.json"])
-    # pkl_path_high   = str(json_paths["high_reasoning.json"])
-    # problems_path = str(json_paths["verifier_outputs.json"])
     
     problems = utils.load_json_by_mode(example_directory + "/" + required_files[4])
     easy = utils.load_json_by_mode(example_directory + "/" + required_files[0])
@@ -414,3 +400,6 @@ generator_difficulty_commands = {"First":"Generate first gate", "Increase":"Gene
                          "Increase 3":"It is still way too simple and requiires a lot of work. Generate the next gate and increase the difficulty significantly and make it more ambiguous (so that only reasoning models can solve it).",
                          "Maintain":"Good maintain difficulty and ambiguity generate another gate", "Reduce":"generate new problems with reduced difficulty"}
 
+
+solvability_system_prompt = """You are a solution verifying agent. Verify if the user given solution is the correct solution for the user given problem. After you are done verifying give your final verdict in the in the following format: 
+solvability = {Yes or No}  """
