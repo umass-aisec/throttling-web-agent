@@ -7,19 +7,12 @@ This guide will help you get up and running with the Rebus Generation Package in
 - Python 3.9 or higher
 - API key for OpenAI or Google AI services
 
-## Step 1: Setup Environment
-
-1. **Navigate to the package directory:**
-   ```bash
-   cd cleaned_version_complete_1
-   ```
-
-2. **Install dependencies:**
+1. **Install dependencies:**
    ```bash
    pip install -r requirements.txt
    ```
 
-3. **Set up your API keys:**
+2. **Set up your API keys:**
    Create a `.env` file in the package root:
    ```bash
    echo "OPENAI_API_KEY=your_openai_api_key_here" > .env
@@ -29,27 +22,16 @@ This guide will help you get up and running with the Rebus Generation Package in
 
 ## Step 2: Basic Usage
 
-### Option A: Offline Puzzle Generation
-Run the basic example script:
+###  Offline Puzzle Generation
+Run the basic example script in examples:
 ```bash
-python example_usage.py
+python example_usage_reasoning.py
 ```
 
 This will:
 - Load the word bank and domains
-- Generate 3 easy rebus puzzles
+- Generate rebus puzzles
 - Display the puzzles and solutions
-
-### Option B: ICL-example generation (generate samples used in offline generation)
-Run the ICL example script:
-```bash
-python example_icl_generation.py
-```
-
-This will:
-- Generate ICL examples (if they don't exist)
-- Create an enhanced system prompt
-- Generate higher-quality puzzles using the examples
 
 ## Step 3: Custom Usage
 
@@ -92,13 +74,6 @@ icl_generation.generate_icl_examples(
     minimum_problem_per_difficulty=10
 )
 ```
-
-## Step 4: Explore Examples
-
-Check out the Jupyter notebooks in the `examples/` directory:
-- `offline_generation.ipynb` - Detailed offline generation examples
-- `generate_icl_examples.ipynb` - ICL example generation
-
 ## Troubleshooting
 
 ### Common Issues
