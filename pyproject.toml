@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cleaned_version_usenix"
+version = "0.1.0"
+requires-python = ">=3.9"
+
+# Tell setuptools to package the top-level package named "src"
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
