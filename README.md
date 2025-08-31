@@ -19,17 +19,12 @@ This package provides tools to:
 
 ### Setup
 
-1. **Clone or navigate to the package directory:**
-   ```bash
-   cd cleaned_version_complete_1
-   ```
-
-2. **Install dependencies:**
+1. **Install dependencies:**
    ```bash
    pip install openai>=1.0.0 python-dotenv>=1.0.0 pandas requests beautifulsoup4 tqdm tenacity google-genai
    ```
 
-3. **Set up environment variables:**
+2. **Set up environment variables:**
    Create a `.env` file in the package root with your API keys:
    ```bash
    OPENAI_API_KEY=your_openai_api_key_here
@@ -54,8 +49,8 @@ cleaned_version_complete_1/
 │   ├── prompts.py          # System prompts and utilities
 │   └── utils.py            # Utility functions and API calls
 ├── examples/               # Usage examples
-│   ├── generate_icl_examples.ipynb
-│   ├── offline_generation.ipynb
+│   ├── example_usage_non_reasoning.py
+│   ├── example_usage_reasoning.py
 │   └── words.txt          # Word bank for puzzle generation
 ├── ICL-examples/          # Generated ICL examples
 │   ├── high_reasoning.json
@@ -78,7 +73,7 @@ Generate rebus puzzles without using ICL examples. This is useful for models tha
 **Key Functions:**
 - `generate_bank_reasoning()`: Generate reasoning-based puzzles
 - `generate_bank_non_reasoning()`: Generate non-reasoning puzzles
-- `gen_sample()`: Generate individual puzzle samples
+- `generate_icl_examples()`: Generate ICL-examples, if not available, for offline generation
 
 **Example Usage:**
 ```python
