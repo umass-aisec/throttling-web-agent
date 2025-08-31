@@ -1,4 +1,4 @@
-# Rebus Generation Package
+# Throttling Web Agents Using Reasoning Gates
 
 A Python package for generating reasoning-based rebus puzzles using large language models. This package supports both offline generation of rebus puzzles and in-context learning (ICL) example generation for improved model performance.
 
