@@ -146,30 +146,38 @@ system_prompt = prompts.construct_system_prompt(
 
 ## Supported Models
 
-### OpenAI Models
-- `gpt-4o` (recommended)
-- `o3` (Claude 3.5 Sonnet)
-- `o3-mini` (Claude 3.5 Haiku)
+### OpenAI Models tested 
+- `gpt-4o`
+- `o3`
+- `o3-mini`
 
-### Google Models
-- `gemini-1.5-flash`
-- `gemini-1.5-pro`
+### Google Models tested
+- `gemini-2.5-flash`
+- `gemini-2.5-pro`
 - `gemma-3-27b-it`
 
 ## Difficulty Control
 
-The package controls puzzle difficulty based on solution word length:
+During offline generation you can provide difficulty control length as amn integer or a tupple:
 
-- **Easy**: Solutions ≤ 6 characters
-- **Medium**: Solutions 4-8 characters (configurable)
-- **Hard**: Solutions ≥ 6 characters
+- if integer us provided
+  
+   - **Easy**: Solutions ≤ integer
+   - **Medium**: Solutions ≤ integer
+   - **Hard**: Solutions ≥ integer
+     
+- if tupple us provided
+  
+   - **Easy**: Solutions ≤ first value of tupple
+   - **Medium**: Solutions ≥ first value of tupple and Solutions ≤  second value of tupple
+   - **Hard**: Solutions ≥ second value of tupple  
 
 You can customize thresholds by passing different values to the generation functions.
 
 ## Data Sources
 
 ### Domains
-The package includes 977 academic domains covering:
+The package several domains domains covering:
 - Sciences (Physics, Chemistry, Biology, etc.)
 - Engineering disciplines
 - Humanities (History, Philosophy, Literature, etc.)
@@ -250,9 +258,7 @@ puzzles = offline_generation.generate_bank_reasoning(
 Generated puzzles include:
 - `generated_question`: The rebus puzzle text
 - `generated_solution`: The correct answer
-- `generated_response`: Full model response with metadata
 - `labels`: Difficulty classification
-- `solvability`: Whether the puzzle is solvable
 
 ## Error Handling
 
@@ -261,14 +267,6 @@ The package includes robust error handling for:
 - Invalid puzzle generation
 - Model-specific issues
 - File I/O operations
-
-## Contributing
-
-To contribute to this package:
-1. Ensure all tests pass
-2. Follow the existing code style
-3. Add appropriate documentation
-4. Test with multiple model providers
 
 ## License
 
