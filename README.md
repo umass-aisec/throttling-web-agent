@@ -73,7 +73,6 @@ Generate rebus puzzles without using ICL examples. This is useful for models tha
 **Key Functions:**
 - `generate_bank_reasoning()`: Generate reasoning-based puzzles
 - `generate_bank_non_reasoning()`: Generate non-reasoning puzzles
-- `generate_icl_examples()`: Generate ICL-examples, if not available, for offline generation
 
 **Example Usage:**
 ```python
@@ -101,10 +100,8 @@ puzzles = offline_generation.generate_bank_reasoning(
 
 Generate in-context learning examples to improve model performance on rebus generation tasks.
 
-**Key Functions:**
+**Key Function:**
 - `generate_icl_examples()`: Generate ICL examples with difficulty control
-- `challenge_generator_func()`: Generate individual challenges
-- `response_generator_func()`: Generate responses to challenges
 
 **Example Usage:**
 ```python
