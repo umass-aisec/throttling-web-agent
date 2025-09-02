@@ -262,8 +262,7 @@ The package includes robust error handling for:
 
 ## License
 
-This package is part of a research project. Please refer to the project documentation for licensing information.
-
+This package is part of a research project.
 ## Support
 
 For issues and questions:
