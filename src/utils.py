@@ -245,8 +245,31 @@ def solution_verification(prover, problem):
     else:
         return False
 
+def gate_word(d: Mapping) -> str:
+    """
+    Examples:
+      gate_word({"Gate 2": "A", "Gate 1": "B"}) -> 'ba'
+      gate_word({"Gate": "S U P E R"})          -> 'super'
+      gate_word({"Gate": "A", "Gate 3": "B"})   -> 'ab'
+    """
+    pattern = re.compile(r'^gate(?:\s+(\d+))?$', re.IGNORECASE)
+
+    parts = []
+    for k, v in d.items():
+        m = pattern.fullmatch(str(k))
+        if not m:
+            continue
+        num = int(m.group(1)) if m.group(1) is not None else None
+        parts.append((num, str(v)))
+
+    # "Gate" (no number) first, then Gate 1, Gate 2, ...
+    parts.sort(key=lambda t: (-1 if t[0] is None else t[0]))
+
+    # Remove spaces and lowercase
+    return ''.join(val.replace(' ', '') for _, val in parts).lower()
+
 def accuracy_mesurement(dataset, model="o3-mini", provider="OpenAI"):
-    response = []
+    current_response = []
     response_solution = []
     for problem in dataset['Problems']:
         incorrect_dict = True
@@ -264,18 +287,25 @@ def accuracy_mesurement(dataset, model="o3-mini", provider="OpenAI"):
                 try:
                     # Try your code here
                     response_dict = json.loads(response_dict.group(0))
+                    #print(response_dict)
                     incorrect_dict = False
                 except:
                     # Optionally handle the error or just pass
                     print("Error occurred, retrying...")
                     pass  
-        response += [response_text]
+        #current_response += [response_dict['Gate']]
+        #print(response_text)
         response_solution += [response_dict]
+        #print(response_solution)
     correct = 0
     index_incorrect = []
     for index in range(len(dataset['Solutions'])):
         lower_solution = dataset['Solutions'][index].lower()
-        response = response_solution[index]['Gate'].lower()
+        try:
+            response = gate_word(response_solution[index])
+            print(gate_word(response_solution[index]))
+        except:
+            print("reached here")
         if lower_solution == response:
             correct += 1
         else:
