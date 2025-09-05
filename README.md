@@ -1,17 +1,8 @@
 # Throttling Web Agents Using Reasoning Gates
 
-https://aisec.cs.umass.edu/demo/web-agent-throttling/
+## Demo - https://aisec.cs.umass.edu/demo/web-agent-throttling/
 
-```
-@misc{kumar2025throttlingwebagentsusing,
-  title={Throttling Web Agents Using Reasoning Gates}, 
-  author={Abhinav Kumar and Jaechul Roh and Ali Naseh and Amir Houmansadr and Eugene Bagdasarian},
-  year={2025},
-  eprint={2509.01619},
-  url={https://arxiv.org/abs/2509.01619}
-}
 
-```
 
 
 A Python package for generating reasoning-based rebus puzzles using large language models. This package supports both offline generation of rebus puzzles and in-context learning (ICL) example generation for improved model performance.
@@ -284,3 +275,15 @@ For issues and questions:
 2. Review the source code in `src/`
 3. Ensure your API keys are properly configured
 4. Verify your Python environment meets the requirements
+
+## Citation
+```
+@misc{kumar2025throttlingwebagentsusing,
+  title={Throttling Web Agents Using Reasoning Gates}, 
+  author={Abhinav Kumar and Jaechul Roh and Ali Naseh and Amir Houmansadr and Eugene Bagdasarian},
+  year={2025},
+  eprint={2509.01619},
+  url={https://arxiv.org/abs/2509.01619}
+}
+
+```
