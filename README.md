@@ -1,6 +1,6 @@
 # Throttling Web Agents Using Reasoning Gates
 
-## Demo - https://aisec.cs.umass.edu/demo/web-agent-throttling/
+## Demo - https://aisec.cs.umass.edu/projects/web-agent-throttling/
 
 
 
