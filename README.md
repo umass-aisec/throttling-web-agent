@@ -155,15 +155,15 @@ system_prompt = prompts.construct_system_prompt(
 
 ## Difficulty Control
 
-During offline generation you can provide difficulty control length as amn integer or a tupple:
+During offline generation you can provide difficulty control length as an integer or a tupple:
 
-- if integer us provided
+- if integer is provided
   
    - **Easy**: Solutions ≤ integer
    - **Medium**: Solutions ≤ integer
    - **Hard**: Solutions ≥ integer
      
-- if tupple us provided
+- if tupple is provided
   
    - **Easy**: Solutions ≤ first value of tupple
    - **Medium**: Solutions ≥ first value of tupple and Solutions ≤  second value of tupple
@@ -174,7 +174,7 @@ You can customize thresholds by passing different values to the generation funct
 ## Data Sources
 
 ### Domains
-The package several domains domains covering:
+The package has several domains covering:
 - Sciences (Physics, Chemistry, Biology, etc.)
 - Engineering disciplines
 - Humanities (History, Philosophy, Literature, etc.)
